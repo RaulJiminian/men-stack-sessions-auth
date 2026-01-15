@@ -23,10 +23,20 @@ const registerUser = async (req, res) => {
   const hashedPassword = bcrypt.hashSync(req.body.password, 10);
 
   // Create our new user
-  await User.create({ username: req.body.username, password: hashedPassword });
+  const user = await User.create({
+    username: req.body.username,
+    password: hashedPassword,
+  });
 
-  // redirect somewhere
-  res.redirect("/");
+  // Manage Session
+  req.session.user = {
+    username: user.username,
+    _id: user._id,
+  };
+
+  req.session.save(() => {
+    res.redirect("/");
+  });
 };
 
 // GET "/auth/login"
@@ -59,13 +69,16 @@ const loginUser = async (req, res) => {
     _id: userInDatabase._id,
   };
 
-  res.redirect("/");
+  req.session.save(() => {
+    res.redirect("/");
+  });
 };
 
 // GET "/auth/sign-out"
 const signOut = (req, res) => {
-  req.session.destroy();
-  res.redirect("/");
+  req.session.destroy(() => {
+    res.redirect("/");
+  });
 };
 
 module.exports = {

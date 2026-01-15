@@ -6,6 +6,7 @@ const path = require("path");
 const db = require("./db/connection.js");
 const routes = require("./routes/index.js");
 const dotenv = require("dotenv");
+const MongoStore = require("connect-mongo").default;
 dotenv.config();
 
 const app = express();
@@ -21,6 +22,9 @@ app.use(
     secret: process.env.SESSION_SECRET,
     resave: false,
     saveUninitialized: true,
+    store: MongoStore.create({
+      mongoUrl: process.env.MONGODB_URI,
+    }),
   })
 );
 
