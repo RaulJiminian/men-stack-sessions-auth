@@ -6,6 +6,11 @@
     <title>Landing Page</title>
   </head>
   <body>
-    <h1>Welcome to the app!</h1>
+    <%- include("partials/nav.ejs", { user }) %>
+    <% if (user) {%>
+      <h1>Welcome to the app, <%= user.username %>!</h1>
+    <% } else { %>
+      <h1>Welcome to the app, Guest!</h1>
+    <% } %>
   </body>
 </html>
