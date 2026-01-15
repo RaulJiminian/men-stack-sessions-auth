@@ -1,7 +1,8 @@
 const express = require("express");
 const logger = require("morgan");
-const methodOverride = require("method-override");
 const session = require("express-session");
+const methodOverride = require("method-override");
+const passUserToView = require("./middleware/pass-user-to-view.js");
 const path = require("path");
 const db = require("./db/connection.js");
 const routes = require("./routes/index.js");
@@ -27,6 +28,7 @@ app.use(
     }),
   })
 );
+app.use(passUserToView);
 
 // Routes
 app.use("/", routes);
